@@ -1,6 +1,7 @@
 package slash.financing.data;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -16,8 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserBudgetCategoryId implements Serializable {
     @Column(name = "user_id")
-    private Long userId;
+    private UUID userId;
 
     @Column(name = "budget_category_id")
-    private Long budgetCategoryId;
+    private UUID budgetCategoryId;
 }

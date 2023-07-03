@@ -57,12 +57,9 @@ public class User {
     private boolean isActive;
 
     @Builder.Default
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(name = "user_budget_categories", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "budget_category_id"))
     private Set<BudgetCategory> budgetCategories = new HashSet<>();
-
-    // @Column(name = "is_verified")
-    // private boolean isVerified;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

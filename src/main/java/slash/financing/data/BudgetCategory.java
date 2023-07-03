@@ -25,6 +25,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BudgetCategory {
+
+    public static final String DEFAULT_CATEGORY_FOOD = "Food";
+    public static final String DEFAULT_CATEGORY_TRANSPORTATION = "Transportation";
+    public static final String DEFAULT_CATEGORY_HOUSING = "Housing";
+    public static final String DEFAULT_CATEGORY_ENTERTAINMENT = "Entertainment";
+    public static final String DEFAULT_CATEGORY_HEALTHCARE = "Healthcare";
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -33,12 +40,9 @@ public class BudgetCategory {
     @Length(min = 3, max = 35)
     private String name;
 
-    @Column(name = "username", length = 300, nullable = false)
+    @Column(name = "description", length = 300, nullable = false)
     @Length(min = 5, max = 300)
     private String description;
-
-    @Column(name = "is_personal", nullable = false)
-    private boolean isPersonal;
 
     @Builder.Default
     @ManyToMany(mappedBy = "budgetCategories")

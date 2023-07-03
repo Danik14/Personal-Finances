@@ -27,6 +27,4 @@ public class UserBudgetCategory {
     @ManyToOne
     @MapsId("budgetCategoryId")
     private BudgetCategory budgetCategory;
-
-    // Additional fields specific to the user-budget category association
 }
