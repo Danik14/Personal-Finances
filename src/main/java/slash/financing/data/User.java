@@ -1,6 +1,8 @@
 package slash.financing.data;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.validator.constraints.Length;
@@ -13,6 +15,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -32,9 +37,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Builder.Default
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private UserRole role = UserRole.USER;
 
     @Column(name = "username", length = 35, nullable = false)
     @Length(min = 3, max = 35)
@@ -49,6 +55,11 @@ public class User {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
+
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(name = "user_budget_categories", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "budget_category_id"))
+    private Set<BudgetCategory> budgetCategories = new HashSet<>();
 
     // @Column(name = "is_verified")
     // private boolean isVerified;
