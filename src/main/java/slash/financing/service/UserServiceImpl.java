@@ -18,20 +18,6 @@ import slash.financing.repository.UserRepository;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-    // private final PasswordEncoder passwordEncoder;
-
-    // public User createUser(User user) {
-    // if (repository.existsByEmail(user.getEmail())) {
-    // throw new UserAlreadyExistsException("User with such email already exists");
-    // } else if (repository.existsByUsername(user.getUsername())) {
-    // throw new UserAlreadyExistsException("User with such username already
-    // exists");
-    // }
-
-    // user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-    // return repository.save(user);
-    // }
 
     @Override
     public List<User> getAllUsers() {
