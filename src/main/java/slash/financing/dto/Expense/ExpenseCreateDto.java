@@ -19,9 +19,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExpenseCreateDto {
 
-    @org.hibernate.validator.constraints.UUID
     @NotNull
-    private UUID id;
+    private UUID budgetCategoryId;
 
     @Positive
     @NotNull

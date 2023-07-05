@@ -1,6 +1,7 @@
 package slash.financing.controller;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,19 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import slash.financing.data.Expense;
 import slash.financing.data.User;
+import slash.financing.dto.Expense.ExpenseCreateDto;
 import slash.financing.dto.Expense.ExpenseResponseDto;
+import slash.financing.service.BudgetCategoryService;
 import slash.financing.service.ExpenseService;
 import slash.financing.service.UserService;
 
 @RestController
 @RequestMapping("api/v1/expenses")
 @RequiredArgsConstructor
-// @Slf4j
+@Slf4j
 public class ExpenseController {
     private final UserService userService;
     private final ExpenseService expenseService;
+    private final BudgetCategoryService budgetCategoryService;
 
     @GetMapping("")
     public ResponseEntity<List<ExpenseResponseDto>> getUserExpenses(Principal principal) {
@@ -52,7 +57,7 @@ public class ExpenseController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addUserExpense(@Valid @RequestBody Expense expense, Principal principal,
+    public ResponseEntity<?> addUserExpense(@Valid @RequestBody ExpenseCreateDto expenseCreateDto, Principal principal,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -62,10 +67,24 @@ public class ExpenseController {
             return ResponseEntity.badRequest().body(errors);
         }
 
+        log.info("1");
+
+        // UUID id = UUID.fromString(expenseCreateDto.getBudgetCategoryId().toString());
+        if (expenseCreateDto.getBudgetCategoryId().toString() == null) {
+            throw new IllegalArgumentException("Invalid UUID format");
+        }
+
         String userEmail = principal.getName();
         User user = userService.getUserByEmail(userEmail);
 
-        List<Expense> expenses = expenseService.getUserExpenses(user);
-        return ResponseEntity.ok().body(expenses);
+        Expense expense = Expense.builder()
+                .amount(expenseCreateDto.getAmount())
+                .user(user)
+                .budgetCategory(budgetCategoryService.getBudgetCategoryById(expenseCreateDto.getBudgetCategoryId()))
+                .date(LocalDate.now())
+                .description(expenseCreateDto.getDescription())
+                .build();
+
+        return ResponseEntity.ok().body(expenseService.saveExpense(expense));
     }
 }

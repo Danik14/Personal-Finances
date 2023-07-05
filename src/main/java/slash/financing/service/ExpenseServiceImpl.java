@@ -25,6 +25,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     public Expense saveExpense(Expense expense) {
+
         return expenseRepository.save(expense);
     }
 }
