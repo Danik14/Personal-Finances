@@ -1,5 +1,6 @@
 package slash.financing.config;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -36,22 +37,27 @@ public class DataLoader implements CommandLineRunner {
                                 BudgetCategory.builder()
                                                 .name(BudgetCategory.DEFAULT_CATEGORY_FOOD)
                                                 .description("Expenses related to food")
+                                                .isPersonal(false)
                                                 .build(),
                                 BudgetCategory.builder()
                                                 .name(BudgetCategory.DEFAULT_CATEGORY_TRANSPORTATION)
                                                 .description("Expenses related to transportation")
+                                                .isPersonal(false)
                                                 .build(),
                                 BudgetCategory.builder()
                                                 .name(BudgetCategory.DEFAULT_CATEGORY_HOUSING)
                                                 .description("Expenses related to housing")
+                                                .isPersonal(false)
                                                 .build(),
                                 BudgetCategory.builder()
                                                 .name(BudgetCategory.DEFAULT_CATEGORY_ENTERTAINMENT)
                                                 .description("Expenses related to entertainment")
+                                                .isPersonal(false)
                                                 .build(),
                                 BudgetCategory.builder()
                                                 .name(BudgetCategory.DEFAULT_CATEGORY_HEALTHCARE)
                                                 .description("Expenses related to healthcare")
+                                                .isPersonal(false)
                                                 .build());
 
                 budgetCategoryRepository.saveAll(defaultCategories);
@@ -59,22 +65,57 @@ public class DataLoader implements CommandLineRunner {
 
         private void createAndSaveDefaultUsers() {
                 List<BudgetCategory> defaultCategories = budgetCategoryRepository.findAll();
+                List<BudgetCategory> personalCategories1 = new ArrayList<>(defaultCategories);
+                List<BudgetCategory> personalCategories2 = new ArrayList<>(defaultCategories);
+                List<BudgetCategory> personalCategories3 = new ArrayList<>(defaultCategories);
+                List<BudgetCategory> personalCategories4 = new ArrayList<>(defaultCategories);
+                List<BudgetCategory> personalCategories5 = new ArrayList<>(defaultCategories);
+
+                personalCategories1.add(BudgetCategory.builder()
+                                .name("Movies")
+                                .description("Expenses related to movies")
+                                .isPersonal(true)
+                                .build());
+
+                personalCategories2.add(BudgetCategory.builder()
+                                .name("shtory")
+                                .description("Lyublyu krasivye shtory")
+                                .isPersonal(true)
+                                .build());
+
+                personalCategories3.add(BudgetCategory.builder()
+                                .name("Barbie - Oppenheimer 21.07")
+                                .description("Barbie - Oppenheimer 21.07")
+                                .isPersonal(true)
+                                .build());
+
+                personalCategories4.add(BudgetCategory.builder()
+                                .name("aboniment 1fit")
+                                .description("Expenses related to aboniment 1fit")
+                                .isPersonal(true)
+                                .build());
+
+                personalCategories5.add(BudgetCategory.builder()
+                                .name("Kaspi magaz")
+                                .description("Expenses related to kaspi magaz")
+                                .isPersonal(true)
+                                .build());
 
                 User user1 = new User(UUID.randomUUID(), UserRole.USER, "John",
                                 "john@example.com",
-                                passwordEncoder.encode("password1"), true, (defaultCategories));
+                                passwordEncoder.encode("password1"), true, (personalCategories1));
                 User user2 = new User(UUID.randomUUID(), UserRole.USER, "Jane",
                                 "jane@example.com",
-                                passwordEncoder.encode("password2"), true, (defaultCategories));
+                                passwordEncoder.encode("password2"), true, (personalCategories2));
                 User user3 = new User(UUID.randomUUID(), UserRole.ADMIN, "Ryan",
                                 "gosling@example.com",
-                                passwordEncoder.encode("password3"), true, (defaultCategories));
+                                passwordEncoder.encode("password3"), true, (personalCategories3));
                 User user4 = new User(UUID.randomUUID(), UserRole.USER, "Papzan",
                                 "papzan@example.com",
-                                passwordEncoder.encode("password4"), true, (defaultCategories));
+                                passwordEncoder.encode("password4"), true, (personalCategories4));
                 User user5 = new User(UUID.randomUUID(), UserRole.ADMIN, "Danik",
                                 "danik@example.com",
-                                passwordEncoder.encode("danik12345"), true, (defaultCategories));
+                                passwordEncoder.encode("danik12345"), true, (personalCategories5));
 
                 userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5));
         }

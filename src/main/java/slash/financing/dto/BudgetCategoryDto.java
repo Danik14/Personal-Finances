@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BudgetCategoryUpdateDto {
+public class BudgetCategoryDto {
     @Length(min = 3, max = 35, message = "name must be between 3 and 35")
     public String name;
 

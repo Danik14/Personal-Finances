@@ -4,16 +4,20 @@ import java.util.List;
 import java.util.UUID;
 
 import slash.financing.data.BudgetCategory;
-import slash.financing.dto.BudgetCategoryUpdateDto;
+import slash.financing.data.User;
+import slash.financing.dto.BudgetCategoryDto;
 
 public interface BudgetCategoryService {
-    BudgetCategory createPersonalBudgetCategory(BudgetCategory budgetCategory);
+    BudgetCategory createPersonalBudgetCategory(BudgetCategoryDto budgetCategoryDto, User user);
 
-    List<BudgetCategory> getAllBudgetCategories();
+    List<BudgetCategory> getDefaultBudgetCategories();
+
+    List<BudgetCategory> getPersonalBudgetCategories(UUID id);
 
     BudgetCategory getBudgetCategoryById(UUID id);
 
     void deleteBudgetCategory(UUID id);
 
-    BudgetCategory updateBudgetCategory(BudgetCategory budgetCategory, BudgetCategoryUpdateDto budgetCategoryUpdateDto);
+    BudgetCategory updateBudgetCategory(BudgetCategory budgetCategory, BudgetCategoryDto budgetCategoryUpdateDto);
+
 }

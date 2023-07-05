@@ -17,7 +17,9 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import slash.financing.data.User;
+import slash.financing.dto.LimitedUserDto;
 import slash.financing.dto.UserUpdateDto;
+import slash.financing.enums.UserRole;
 import slash.financing.service.UserService;
 
 @RestController
@@ -34,13 +36,32 @@ public class UserController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<User> getOne(@PathVariable String uuid) {
+    public ResponseEntity<?> getOne(@PathVariable String uuid, Principal principal) {
         UUID id = UUID.fromString(uuid);
         if (uuid == null) {
             throw new IllegalArgumentException("Invalid UUID format");
         }
 
-        return ResponseEntity.ok().body(userService.getUserById(id));
+        String userEmail = principal.getName();
+        User loggedInUser = userService.getUserByEmail(userEmail);
+
+        // Check if the logged-in user is an admin
+        if (loggedInUser.getRole() == UserRole.ADMIN || loggedInUser.getId().equals(id)) {
+            // If admin or accessing own ID, return the full user information
+            User user = userService.getUserById(id);
+            return ResponseEntity.ok().body(user);
+        } else {
+            // If regular user trying to access someone else's ID, return limited user
+            // information
+            User user = userService.getUserById(id);
+            LimitedUserDto limitedUserDTO = LimitedUserDto.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .username(user.getUsername())
+                    .build();
+
+            return ResponseEntity.ok().body(limitedUserDTO);
+        }
     }
 
     @PatchMapping("/{uuid}")

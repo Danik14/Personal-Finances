@@ -48,6 +48,10 @@ public class BudgetCategory {
     private String description;
 
     @Builder.Default
+    @Column(name = "is_personal", nullable = false)
+    private boolean isPersonal = true;
+
+    @Builder.Default
     @JsonBackReference
     @ManyToMany(mappedBy = "budgetCategories", fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();

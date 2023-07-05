@@ -12,8 +12,10 @@ import org.springframework.web.server.ResponseStatusException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import slash.financing.dto.ErrorDto;
+import slash.financing.exception.BudgetCategoryNotFoundException;
 import slash.financing.exception.UserAlreadyExistsException;
 import slash.financing.exception.UserNotFoundException;
+import slash.financing.exception.VerificationTokenNotFoundException;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {
@@ -30,7 +32,8 @@ public class ExceptionHandlerController {
                                                 .build());
         }
 
-        @ExceptionHandler({ UserNotFoundException.class })
+        @ExceptionHandler({ UserNotFoundException.class, BudgetCategoryNotFoundException.class,
+                        VerificationTokenNotFoundException.class })
         public ResponseEntity<?> handleNotFound(HttpServletRequest request, RuntimeException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                                 ErrorDto.builder()
