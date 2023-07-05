@@ -1,5 +1,6 @@
 package slash.financing.config;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -133,7 +134,7 @@ public class DataLoader implements CommandLineRunner {
                 User papzan = userRepository.findByEmail("papzan@example.com").orElse(null);
 
                 Expense expense1 = Expense.builder()
-                                .amount(50)
+                                .amount(new BigDecimal(50.00))
                                 .date(LocalDate.now())
                                 .description("Spent a lot of money")
                                 .user(ryanGosling)
@@ -141,7 +142,7 @@ public class DataLoader implements CommandLineRunner {
                                 .build();
 
                 Expense expense2 = Expense.builder()
-                                .amount(500)
+                                .amount(new BigDecimal(50.00))
                                 .date(LocalDate.now())
                                 .description("Standard expense for milliarder from Vinnica")
                                 .user(papzan)

@@ -1,5 +1,6 @@
 package slash.financing.data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ public class Expense {
     private UUID id;
 
     @Column(name = "amount", nullable = false)
-    private int amount;
+    private BigDecimal amount;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;

@@ -17,7 +17,7 @@ public class BudgetCategoryDto {
     @NotNull
     public String name;
 
-    @Length(min = 5, max = 300, message = "message must be between 5 and 300")
+    @Length(min = 5, max = 300, message = "description must be between 5 and 300")
     @NotNull
     private String description;
 }
