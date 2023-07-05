@@ -1,5 +1,6 @@
 package slash.financing.config;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import slash.financing.data.BudgetCategory;
+import slash.financing.data.Expense;
 import slash.financing.data.User;
 import slash.financing.enums.UserRole;
 import slash.financing.repository.BudgetCategoryRepository;
+import slash.financing.repository.ExpenseRepository;
 import slash.financing.repository.UserRepository;
 
 @Component
@@ -21,6 +24,7 @@ import slash.financing.repository.UserRepository;
 public class DataLoader implements CommandLineRunner {
         private final BudgetCategoryRepository budgetCategoryRepository;
         private final UserRepository userRepository;
+        private final ExpenseRepository expenseRepository;
         private final PasswordEncoder passwordEncoder;
 
         @Override
@@ -30,6 +34,9 @@ public class DataLoader implements CommandLineRunner {
 
                 // Create and save the default users
                 createAndSaveDefaultUsers();
+
+                // Create and save the default expenses
+                createAndSaveDefaultExpenses();
         }
 
         private void createAndSaveDefaultCategories() {
@@ -118,5 +125,30 @@ public class DataLoader implements CommandLineRunner {
                                 passwordEncoder.encode("danik12345"), true, (personalCategories5));
 
                 userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5));
+        }
+
+        private void createAndSaveDefaultExpenses() {
+                List<BudgetCategory> defaultCategories = budgetCategoryRepository.findAll();
+                User ryanGosling = userRepository.findByEmail("gosling@example.com").orElse(null);
+                User papzan = userRepository.findByEmail("papzan@example.com").orElse(null);
+
+                Expense expense1 = Expense.builder()
+                                .amount(50)
+                                .date(LocalDate.now())
+                                .description("Spent a lot of money")
+                                .user(ryanGosling)
+                                .budgetCategory(defaultCategories.stream().findAny().orElse(null))
+                                .build();
+
+                Expense expense2 = Expense.builder()
+                                .amount(500)
+                                .date(LocalDate.now())
+                                .description("Standard expense for milliarder from Vinnica")
+                                .user(papzan)
+                                .budgetCategory(defaultCategories.stream().findAny().orElse(null))
+                                .build();
+
+                expenseRepository.saveAll(List.of(expense1, expense2));
+
         }
 }
