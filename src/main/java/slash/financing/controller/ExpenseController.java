@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 import slash.financing.data.Expense;
 import slash.financing.data.User;
 import slash.financing.dto.Expense.ExpenseResponseDto;
-import slash.financing.repository.ExpenseRepository;
+import slash.financing.service.ExpenseService;
 import slash.financing.service.UserService;
 
 @RestController
@@ -29,13 +29,13 @@ import slash.financing.service.UserService;
 // @Slf4j
 public class ExpenseController {
     private final UserService userService;
-    private final ExpenseRepository expenseRepository;
+    private final ExpenseService expenseService;
 
     @GetMapping("")
     public ResponseEntity<List<ExpenseResponseDto>> getUserExpenses(Principal principal) {
         String userEmail = principal.getName();
         User user = userService.getUserByEmail(userEmail);
-        List<Expense> expenses = expenseRepository.findByUser(user);
+        List<Expense> expenses = expenseService.getUserExpenses(user);
 
         List<ExpenseResponseDto> expenseResponses = expenses.stream()
                 .map(expense -> ExpenseResponseDto.builder()
@@ -65,7 +65,7 @@ public class ExpenseController {
         String userEmail = principal.getName();
         User user = userService.getUserByEmail(userEmail);
 
-        List<Expense> expenses = expenseRepository.findByUser(user);
+        List<Expense> expenses = expenseService.getUserExpenses(user);
         return ResponseEntity.ok().body(expenses);
     }
 }
