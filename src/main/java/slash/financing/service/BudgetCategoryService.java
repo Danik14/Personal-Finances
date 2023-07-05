@@ -12,6 +12,8 @@ public interface BudgetCategoryService {
 
     List<BudgetCategory> getDefaultBudgetCategories();
 
+    boolean existsById(UUID id);
+
     List<BudgetCategory> getPersonalBudgetCategories(UUID id);
 
     BudgetCategory getBudgetCategoryById(UUID id);

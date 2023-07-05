@@ -13,6 +13,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import slash.financing.dto.ErrorDto;
 import slash.financing.exception.BudgetCategoryNotFoundException;
+import slash.financing.exception.BudgetCategoryPersonalCountException;
 import slash.financing.exception.UserAlreadyExistsException;
 import slash.financing.exception.UserNotFoundException;
 import slash.financing.exception.VerificationTokenNotFoundException;
@@ -81,7 +82,7 @@ public class ExceptionHandlerController {
                                                 .build());
         }
 
-        @ExceptionHandler(ResponseStatusException.class)
+        @ExceptionHandler({ ResponseStatusException.class, BudgetCategoryPersonalCountException.class })
         public ResponseEntity<ErrorDto> handleConflict(HttpServletRequest request, RuntimeException e) {
                 return ResponseEntity
                                 .status(HttpStatus.CONFLICT)
@@ -93,4 +94,5 @@ public class ExceptionHandlerController {
                                                 .message(e.getMessage())
                                                 .build());
         }
+
 }

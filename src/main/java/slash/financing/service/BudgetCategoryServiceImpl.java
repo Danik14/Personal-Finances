@@ -12,23 +12,36 @@ import slash.financing.data.User;
 import slash.financing.dto.BudgetCategoryDto;
 import slash.financing.exception.BudgetCategoryNotFoundException;
 import slash.financing.repository.BudgetCategoryRepository;
+import slash.financing.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class BudgetCategoryServiceImpl implements BudgetCategoryService {
     private final BudgetCategoryRepository budgetCategoryRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
     @Override
     public BudgetCategory createPersonalBudgetCategory(BudgetCategoryDto budgetCategoryDto, User user) {
+        // Since i have a many-to-many relationship i have to update an object on both
+        // sides
+        // so that they include each other
         BudgetCategory budgetCategory = modelMapper.map(budgetCategoryDto, BudgetCategory.class);
         budgetCategory.getUsers().add(user);
-        return budgetCategoryRepository.save(budgetCategory);
+        user.getBudgetCategories().add(budgetCategory); // Update the user's budget categories
+        budgetCategoryRepository.save(budgetCategory);
+        userRepository.save(user); // Save the user with the updated budget categories
+        return budgetCategory;
     }
 
     @Override
     public List<BudgetCategory> getDefaultBudgetCategories() {
         return budgetCategoryRepository.findByIsPersonalFalse();
+    }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return budgetCategoryRepository.existsById(id);
     }
 
     @Override

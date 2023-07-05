@@ -71,7 +71,7 @@ public class UserController {
         User user = userService.getUserById(uuid);
 
         // Check if the email is being updated to a different value
-        if (!user.getEmail().equals(userEmail)) {
+        if (!user.getEmail().equals(userEmail) || user.getRole() != UserRole.ADMIN) {
             log.error(userEmail + " " + user.getEmail());
 
             throw new ResponseStatusException(HttpStatus.CONFLICT,

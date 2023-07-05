@@ -1,23 +1,43 @@
 package slash.financing.controller;
 
+import java.net.URI;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import slash.financing.data.BudgetCategory;
+import slash.financing.data.User;
+import slash.financing.dto.BudgetCategoryDto;
+import slash.financing.enums.UserRole;
+import slash.financing.exception.BudgetCategoryNotFoundException;
+import slash.financing.exception.BudgetCategoryPersonalCountException;
 import slash.financing.service.BudgetCategoryService;
 import slash.financing.service.UserService;
 
 @RestController
 @RequestMapping("api/v1/budgetcategory")
 @RequiredArgsConstructor
+@Slf4j
 public class BudgetCategoryController {
     // private final ModelMapper mapper;
     private final BudgetCategoryService budgetCategoryService;
@@ -35,14 +55,6 @@ public class BudgetCategoryController {
             throw new IllegalArgumentException("Invalid UUID format");
         }
         return ResponseEntity.ok().body(budgetCategoryService.getBudgetCategoryById(id));
-    }
-
-    @GetMapping("/personal")
-    public ResponseEntity<?> getPersonal(Principal principal) {
-        String userEmail = principal.getName();
-        UUID userId = userService.getUserByEmail(userEmail).getId();
-
-        return ResponseEntity.ok().body(budgetCategoryService.getPersonalBudgetCategories(userId));
     }
 
     // @PatchMapping("/{uuid}")
@@ -64,42 +76,68 @@ public class BudgetCategoryController {
 
     // }
 
-    // @PostMapping("/personal")
-    // public ResponseEntity<?> addPersonalBudgetCategory(@Valid @RequestBody
-    // BudgetCategoryDto budgetCategoryDto,
-    // BindingResult bindingResult,
-    // UriComponentsBuilder uriBuilder, Principal principal) {
-    // if (bindingResult.hasErrors()) {
-    // // Handle validation errors
-    // Map<String, String> errors = new HashMap<>();
-    // for (FieldError error : bindingResult.getFieldErrors()) {
-    // errors.put(error.getField(), error.getDefaultMessage());
-    // }
-    // return ResponseEntity.badRequest().body(errors);
-    // }
+    @PostMapping("")
+    public ResponseEntity<?> addPersonalBudgetCategory(@Valid @RequestBody BudgetCategoryDto budgetCategoryDto,
+            BindingResult bindingResult,
+            UriComponentsBuilder uriBuilder, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            // Handle validation errors
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
+        }
 
-    // String userEmail = principal.getName();
-    // User user = userService.getUserByEmail(userEmail);
+        String userEmail = principal.getName();
+        User user = userService.getUserByEmail(userEmail);
 
-    // BudgetCategory budgetCategory =
-    // budgetCategoryService.createPersonalBudgetCategory(budgetCategoryDto, user);
+        long personalCategoriesCount = user.getBudgetCategories().stream()
+                .filter(bugdgetCategory -> bugdgetCategory.isPersonal() == true)
+                .count();
 
-    // // Build the URI for the created resource
-    // UriComponents uriComponents =
-    // uriBuilder.path("/budgetcategory{uuid}").buildAndExpand(budgetCategory.getId());
-    // URI createdUri = uriComponents.toUri();
+        if (personalCategoriesCount >= 10) {
+            throw new BudgetCategoryPersonalCountException("You can't create more than 10 personal budget categories");
+        }
 
-    // return ResponseEntity.created(createdUri).body(budgetCategory);
-    // }
+        BudgetCategory budgetCategory = budgetCategoryService.createPersonalBudgetCategory(budgetCategoryDto, user);
 
-    public ResponseEntity<?> deleteBudgetCategory(@PathVariable String uuid) {
+        // Build the URI for the created resource
+        UriComponents uriComponents = uriBuilder.path("/budgetcategory/{uuid}").buildAndExpand(budgetCategory.getId());
+        URI createdUri = uriComponents.toUri();
+
+        log.info("********");
+
+        return ResponseEntity.created(createdUri).body(budgetCategory);
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<?> deleteBudgetCategory(@PathVariable String uuid, Principal principal) {
         UUID id = UUID.fromString(uuid);
         if (uuid == null) {
             throw new IllegalArgumentException("Invalid UUID format");
         }
 
-        budgetCategoryService.deleteBudgetCategory(id);
+        String userEmail = principal.getName();
+        User user = userService.getUserByEmail(userEmail);
 
-        return ResponseEntity.ok().body("BudgetCategory was successfuly deleted");
+        BudgetCategory budgetCategory = budgetCategoryService.getBudgetCategoryById(id);
+
+        if (!budgetCategoryService.existsById(id)) {
+            throw new BudgetCategoryNotFoundException("Budget Category Not Found!");
+        }
+
+        if (user.getBudgetCategories().contains(budgetCategory) || user.getRole() == UserRole.ADMIN) {
+            // Remove the budget category from the user's budgetCategories list
+            user.getBudgetCategories().remove(budgetCategory);
+            userService.saveUser(user); // Save the user entity after modifying the
+                                        // budgetCategories list
+            budgetCategoryService.deleteBudgetCategory(id);
+            return ResponseEntity.ok().body("BudgetCategory was successfuly deleted");
+        } else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Only user who created this category can delete it!");
+        }
+
     }
 }

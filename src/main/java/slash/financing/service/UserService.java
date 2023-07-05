@@ -7,7 +7,7 @@ import slash.financing.data.User;
 import slash.financing.dto.UserUpdateDto;
 
 public interface UserService {
-    // User createUser(User user);
+    User saveUser(User user);
 
     List<User> getAllUsers();
 
