@@ -1,7 +1,7 @@
 package slash.financing.data;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.validator.constraints.Length;
@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -57,6 +56,6 @@ public class BudgetCategory {
 
     @Builder.Default
     @JsonBackReference
-    @ManyToMany(mappedBy = "budgetCategories", fetch = FetchType.EAGER)
-    private Set<User> users = new HashSet<>();
+    @ManyToMany(mappedBy = "budgetCategories")
+    private List<User> users = new ArrayList<>();
 }

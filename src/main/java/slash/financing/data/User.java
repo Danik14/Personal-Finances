@@ -62,9 +62,14 @@ public class User {
 
     @Builder.Default
     @JsonManagedReference
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinTable(name = "user_budget_categories", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "budget_category_id"))
     private List<BudgetCategory> budgetCategories = new ArrayList<>();
+
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    private List<User> friends = new ArrayList<>();
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

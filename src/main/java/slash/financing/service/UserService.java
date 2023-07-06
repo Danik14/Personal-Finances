@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import slash.financing.data.User;
-import slash.financing.dto.UserUpdateDto;
+import slash.financing.dto.User.UserUpdateDto;
 
 public interface UserService {
     User saveUser(User user);

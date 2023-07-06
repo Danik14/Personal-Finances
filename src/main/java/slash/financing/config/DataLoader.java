@@ -30,14 +30,14 @@ public class DataLoader implements CommandLineRunner {
 
         @Override
         public void run(String... args) throws Exception {
-                // Create and save the default budget categories
-                createAndSaveDefaultCategories();
+                // // Create and save the default budget categories
+                // createAndSaveDefaultCategories();
 
-                // Create and save the default users
-                createAndSaveDefaultUsers();
+                // // Create and save the default users
+                // createAndSaveDefaultUsers();
 
-                // Create and save the default expenses
-                createAndSaveDefaultExpenses();
+                // // Create and save the default expenses
+                // createAndSaveDefaultExpenses();
         }
 
         private void createAndSaveDefaultCategories() {
@@ -51,22 +51,23 @@ public class DataLoader implements CommandLineRunner {
                                                 .name(BudgetCategory.DEFAULT_CATEGORY_TRANSPORTATION)
                                                 .description("Expenses related to transportation")
                                                 .isPersonal(false)
-                                                .build(),
-                                BudgetCategory.builder()
-                                                .name(BudgetCategory.DEFAULT_CATEGORY_HOUSING)
-                                                .description("Expenses related to housing")
-                                                .isPersonal(false)
-                                                .build(),
-                                BudgetCategory.builder()
-                                                .name(BudgetCategory.DEFAULT_CATEGORY_ENTERTAINMENT)
-                                                .description("Expenses related to entertainment")
-                                                .isPersonal(false)
-                                                .build(),
-                                BudgetCategory.builder()
-                                                .name(BudgetCategory.DEFAULT_CATEGORY_HEALTHCARE)
-                                                .description("Expenses related to healthcare")
-                                                .isPersonal(false)
-                                                .build());
+                                                .build()
+                // BudgetCategory.builder()
+                // .name(BudgetCategory.DEFAULT_CATEGORY_HOUSING)
+                // .description("Expenses related to housing")
+                // .isPersonal(false)
+                // .build(),
+                // BudgetCategory.builder()
+                // .name(BudgetCategory.DEFAULT_CATEGORY_ENTERTAINMENT)
+                // .description("Expenses related to entertainment")
+                // .isPersonal(false)
+                // .build(),
+                // BudgetCategory.builder()
+                // .name(BudgetCategory.DEFAULT_CATEGORY_HEALTHCARE)
+                // .description("Expenses related to healthcare")
+                // .isPersonal(false)
+                // .build()
+                );
 
                 budgetCategoryRepository.saveAll(defaultCategories);
         }
@@ -111,21 +112,23 @@ public class DataLoader implements CommandLineRunner {
 
                 User user1 = new User(UUID.randomUUID(), UserRole.USER, "John",
                                 "john@example.com",
-                                passwordEncoder.encode("password1"), true, (personalCategories1));
-                User user2 = new User(UUID.randomUUID(), UserRole.USER, "Jane",
-                                "jane@example.com",
-                                passwordEncoder.encode("password2"), true, (personalCategories2));
+                                passwordEncoder.encode("password1"), true, (personalCategories1), new ArrayList<>());
+                // User user2 = new User(UUID.randomUUID(), UserRole.USER, "Jane",
+                // "jane@example.com",
+                // passwordEncoder.encode("password2"), true, (personalCategories2), new
+                // ArrayList<>());
                 User user3 = new User(UUID.randomUUID(), UserRole.ADMIN, "Ryan",
                                 "gosling@example.com",
-                                passwordEncoder.encode("password3"), true, (personalCategories3));
+                                passwordEncoder.encode("password3"), true, (personalCategories3), new ArrayList<>());
                 User user4 = new User(UUID.randomUUID(), UserRole.USER, "Papzan",
                                 "papzan@example.com",
-                                passwordEncoder.encode("password4"), true, (personalCategories4));
-                User user5 = new User(UUID.randomUUID(), UserRole.ADMIN, "Danik",
-                                "danik@example.com",
-                                passwordEncoder.encode("danik12345"), true, (personalCategories5));
+                                passwordEncoder.encode("password4"), true, (personalCategories4), new ArrayList<>());
+                // User user5 = new User(UUID.randomUUID(), UserRole.ADMIN, "Danik",
+                // "danik@example.com",
+                // passwordEncoder.encode("danik12345"), true, (personalCategories5), new
+                // ArrayList<>());
 
-                userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5));
+                userRepository.saveAll(Arrays.asList(user1, user3, user4));
         }
 
         private void createAndSaveDefaultExpenses() {

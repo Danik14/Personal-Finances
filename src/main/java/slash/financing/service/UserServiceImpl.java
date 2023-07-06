@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import slash.financing.data.User;
-import slash.financing.dto.UserUpdateDto;
+import slash.financing.dto.User.UserUpdateDto;
 import slash.financing.enums.UserRole;
 import slash.financing.exception.UserNotFoundException;
 import slash.financing.repository.UserRepository;

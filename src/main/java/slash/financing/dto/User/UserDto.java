@@ -1,18 +1,24 @@
-package slash.financing.dto;
+package slash.financing.dto.User;
 
+import java.util.List;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import slash.financing.dto.BudgetCategoryDto;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LimitedUserDto {
+public class UserDto {
     private UUID id;
     private String username;
     private String email;
+
+    private List<BudgetCategoryDto> budgetCategories;
+
+    private List<FriendDto> friends;
 }

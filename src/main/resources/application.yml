@@ -13,7 +13,7 @@ spring:
   jpa:
     generate-ddl: true # encountered a problem where tables were not auto-created, this solved the problem
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

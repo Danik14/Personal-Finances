@@ -1,9 +1,11 @@
 package slash.financing.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +19,8 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import slash.financing.data.User;
-import slash.financing.dto.LimitedUserDto;
-import slash.financing.dto.UserUpdateDto;
+import slash.financing.dto.User.UserDto;
+import slash.financing.dto.User.UserUpdateDto;
 import slash.financing.enums.UserRole;
 import slash.financing.service.UserService;
 
@@ -27,12 +29,27 @@ import slash.financing.service.UserService;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
-    // private final ModelMapper mapper;
+    private final ModelMapper modelMapper;
     private final UserService userService;
 
     @GetMapping("")
-    public ResponseEntity<List<User>> getAll() {
-        return ResponseEntity.ok().body(userService.getAllUsers());
+    public ResponseEntity<List<UserDto>> getAll() {
+        List<User> users = userService.getAllUsers();
+
+        // Really powerful tool for mapping dtos
+        // modelMapper uses user's fiels names and tries to convert them to UserDto
+        // fields
+        // UserDto class also has list of FriendDto named friends.
+        // So what modelMapper does is it tries to convert List<User> to List<FriendDto>
+        // under the hood
+        // impresive, very nice
+        List<UserDto> userResponse = new ArrayList<>();
+        for (User user : users) {
+            UserDto userDto = modelMapper.map(user, UserDto.class);
+            userResponse.add(userDto);
+        }
+
+        return ResponseEntity.ok().body(userResponse);
     }
 
     @GetMapping("/{uuid}")
@@ -54,13 +71,9 @@ public class UserController {
             // If regular user trying to access someone else's ID, return limited user
             // information
             User user = userService.getUserById(id);
-            LimitedUserDto limitedUserDTO = LimitedUserDto.builder()
-                    .id(user.getId())
-                    .email(user.getEmail())
-                    .username(user.getUsername())
-                    .build();
+            UserDto userDto = modelMapper.map(user, UserDto.class);
 
-            return ResponseEntity.ok().body(limitedUserDTO);
+            return ResponseEntity.ok().body(userDto);
         }
     }
 
@@ -81,30 +94,6 @@ public class UserController {
         return ResponseEntity.ok().body(userService.updateUser(user, userUpdateDto));
 
     }
-
-    // @PostMapping
-    // public ResponseEntity<?> createUser(@Valid @RequestBody UserDto userDto,
-    // BindingResult bindingResult,
-    // UriComponentsBuilder uriBuilder) {
-    // if (bindingResult.hasErrors()) {
-    // // Handle validation errors
-    // Map<String, String> errors = new HashMap<>();
-    // for (FieldError error : bindingResult.getFieldErrors()) {
-    // errors.put(error.getField(), error.getDefaultMessage());
-    // }
-    // return ResponseEntity.badRequest().body(errors);
-    // }
-
-    // User user = mapper.map(userDto, User.class);
-    // User createdUser = service.createUser(user);
-
-    // // Build the URI for the created resource
-    // UriComponents uriComponents =
-    // uriBuilder.path("/users/{id}").buildAndExpand(createdUser.getId());
-    // URI createdUri = uriComponents.toUri();
-
-    // return ResponseEntity.created(createdUri).body(createdUser);
-    // }
 
     public ResponseEntity<?> deleteUser(@PathVariable String uuid) {
         UUID id = UUID.fromString(uuid);

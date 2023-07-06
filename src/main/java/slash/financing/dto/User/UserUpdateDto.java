@@ -1,4 +1,4 @@
-package slash.financing.dto;
+package slash.financing.dto.User;
 
 import org.hibernate.validator.constraints.Length;
 
