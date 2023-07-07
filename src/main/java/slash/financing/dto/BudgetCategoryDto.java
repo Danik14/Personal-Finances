@@ -1,6 +1,11 @@
 package slash.financing.dto;
 
+import java.util.UUID;
+
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,6 +18,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BudgetCategoryDto {
+    @JsonProperty(access = Access.READ_ONLY)
+    private UUID id;
+
     @Length(min = 3, max = 35, message = "name must be between 3 and 35")
     @NotNull
     public String name;

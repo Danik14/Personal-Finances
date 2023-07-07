@@ -1,4 +1,4 @@
-package slash.financing.service;
+package slash.financing.service.Impl;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +12,7 @@ import slash.financing.dto.User.UserUpdateDto;
 import slash.financing.enums.UserRole;
 import slash.financing.exception.UserNotFoundException;
 import slash.financing.repository.UserRepository;
+import slash.financing.service.UserService;
 
 @Service
 @RequiredArgsConstructor

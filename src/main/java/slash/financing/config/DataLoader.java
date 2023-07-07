@@ -75,40 +75,42 @@ public class DataLoader implements CommandLineRunner {
         private void createAndSaveDefaultUsers() {
                 List<BudgetCategory> defaultCategories = budgetCategoryRepository.findAll();
                 List<BudgetCategory> personalCategories1 = new ArrayList<>(defaultCategories);
-                List<BudgetCategory> personalCategories2 = new ArrayList<>(defaultCategories);
+                // List<BudgetCategory> personalCategories2 = new
+                // ArrayList<>(defaultCategories);
                 List<BudgetCategory> personalCategories3 = new ArrayList<>(defaultCategories);
                 List<BudgetCategory> personalCategories4 = new ArrayList<>(defaultCategories);
-                List<BudgetCategory> personalCategories5 = new ArrayList<>(defaultCategories);
+                // List<BudgetCategory> personalCategories5 = new
+                // ArrayList<>(defaultCategories);
 
-                personalCategories1.add(BudgetCategory.builder()
-                                .name("Movies")
-                                .description("Expenses related to movies")
-                                .isPersonal(true)
-                                .build());
+                // personalCategories1.add(BudgetCategory.builder()
+                // .name("Movies")
+                // .description("Expenses related to movies")
+                // .isPersonal(true)
+                // .build());
 
-                personalCategories2.add(BudgetCategory.builder()
-                                .name("shtory")
-                                .description("Lyublyu krasivye shtory")
-                                .isPersonal(true)
-                                .build());
+                // personalCategories2.add(BudgetCategory.builder()
+                // .name("shtory")
+                // .description("Lyublyu krasivye shtory")
+                // .isPersonal(true)
+                // .build());
 
-                personalCategories3.add(BudgetCategory.builder()
-                                .name("Barbie - Oppenheimer 21.07")
-                                .description("Barbie - Oppenheimer 21.07")
-                                .isPersonal(true)
-                                .build());
+                // personalCategories3.add(BudgetCategory.builder()
+                // .name("Barbie - Oppenheimer 21.07")
+                // .description("Barbie - Oppenheimer 21.07")
+                // .isPersonal(true)
+                // .build());
 
-                personalCategories4.add(BudgetCategory.builder()
-                                .name("aboniment 1fit")
-                                .description("Expenses related to aboniment 1fit")
-                                .isPersonal(true)
-                                .build());
+                // personalCategories4.add(BudgetCategory.builder()
+                // .name("aboniment 1fit")
+                // .description("Expenses related to aboniment 1fit")
+                // .isPersonal(true)
+                // .build());
 
-                personalCategories5.add(BudgetCategory.builder()
-                                .name("Kaspi magaz")
-                                .description("Expenses related to kaspi magaz")
-                                .isPersonal(true)
-                                .build());
+                // personalCategories5.add(BudgetCategory.builder()
+                // .name("Kaspi magaz")
+                // .description("Expenses related to kaspi magaz")
+                // .isPersonal(true)
+                // .build());
 
                 User user1 = new User(UUID.randomUUID(), UserRole.USER, "John",
                                 "john@example.com",

@@ -1,4 +1,4 @@
-package slash.financing.service;
+package slash.financing.service.Impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import slash.financing.data.User;
 import slash.financing.repository.UserRepository;
+import slash.financing.service.FriendService;
 
 @Service
 @RequiredArgsConstructor

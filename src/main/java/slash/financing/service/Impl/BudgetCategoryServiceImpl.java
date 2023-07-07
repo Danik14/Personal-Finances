@@ -1,4 +1,4 @@
-package slash.financing.service;
+package slash.financing.service.Impl;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +13,7 @@ import slash.financing.dto.BudgetCategoryDto;
 import slash.financing.exception.BudgetCategoryNotFoundException;
 import slash.financing.repository.BudgetCategoryRepository;
 import slash.financing.repository.UserRepository;
+import slash.financing.service.BudgetCategoryService;
 
 @Service
 @RequiredArgsConstructor
