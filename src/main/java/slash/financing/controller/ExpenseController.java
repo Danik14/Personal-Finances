@@ -42,7 +42,7 @@ public class ExpenseController {
     private final BudgetCategoryService budgetCategoryService;
     private final ModelMapper modelMapper;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<ExpenseDto>> getUserExpenses(Principal principal) {
         String userEmail = principal.getName();
         User user = userService.getUserByEmail(userEmail);
@@ -54,6 +54,24 @@ public class ExpenseController {
 
         return ResponseEntity.ok().body(expenseResponses);
 
+    }
+
+    @GetMapping(params = { "startDate", "endDate" })
+    public ResponseEntity<Map<String, Object>> getTotalExpensesForUserInDateRange(Principal principal,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        String userEmail = principal.getName();
+        User user = userService.getUserByEmail(userEmail);
+        BigDecimal totalExpenses = expenseService.getTotalMoneySpentForUserInDateRange(user, startDate, endDate);
+        List<Expense> expenses = expenseService.getExpensesForUserInDateRange(user, startDate, endDate);
+
+        response.put("total", totalExpenses);
+        response.put("expenses", expenses);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{budgetCategoryId}")
@@ -79,23 +97,5 @@ public class ExpenseController {
         expense.setDate(LocalDate.now());
 
         return ResponseEntity.ok().body(expenseService.saveExpense(expense));
-    }
-
-    @GetMapping("/date-range")
-    public ResponseEntity<Map<String, Object>> getTotalExpensesForUserInDateRange(Principal principal,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-
-        Map<String, Object> response = new HashMap<>();
-
-        String userEmail = principal.getName();
-        User user = userService.getUserByEmail(userEmail);
-        BigDecimal totalExpenses = expenseService.getTotalMoneySpentForUserInDateRange(user, startDate, endDate);
-        List<Expense> expenses = expenseService.getExpensesForUserInDateRange(user, startDate, endDate);
-
-        response.put("total", totalExpenses);
-        response.put("expenses", expenses);
-
-        return ResponseEntity.ok(response);
     }
 }

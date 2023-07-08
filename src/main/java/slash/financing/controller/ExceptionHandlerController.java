@@ -5,11 +5,13 @@ import java.util.Date;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import slash.financing.dto.ErrorDto;
 import slash.financing.exception.BudgetCategoryNotFoundException;
@@ -90,6 +92,19 @@ public class ExceptionHandlerController {
                                                 .timestamp(new Date())
                                                 .status(HttpStatus.CONFLICT.value())
                                                 .error(HttpStatus.CONFLICT.getReasonPhrase())
+                                                .path(request.getServletPath())
+                                                .message(e.getMessage())
+                                                .build());
+        }
+
+        @ExceptionHandler({ HttpRequestMethodNotSupportedException.class })
+        public ResponseEntity<ErrorDto> handleMethodNotAllowed(ServletException e, HttpServletRequest request) {
+                return ResponseEntity
+                                .status(HttpStatus.METHOD_NOT_ALLOWED)
+                                .body(ErrorDto.builder()
+                                                .timestamp(new Date())
+                                                .status(HttpStatus.METHOD_NOT_ALLOWED.value())
+                                                .error(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase())
                                                 .path(request.getServletPath())
                                                 .message(e.getMessage())
                                                 .build());
