@@ -19,7 +19,7 @@ import slash.financing.service.ExpenseService;
 public class ExpenseServiceImpl implements ExpenseService {
     private final ExpenseRepository expenseRepository;
 
-    public List<Expense> getUserExpenses(User user) {
+    public List<Expense> getAllUserExpenses(User user) {
         return expenseRepository.findByUser(user);
     }
 
@@ -37,5 +37,10 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     public List<Expense> getExpensesForUserInDateRange(User user, LocalDate startDate, LocalDate endDate) {
         return expenseRepository.getExpensesForUserInDateRange(user, startDate, endDate);
+    }
+
+    @Override
+    public BigDecimal getTotalMoneySpentForUser(User user) {
+        return expenseRepository.getTotalMoneySpentForUser(user);
     }
 }

@@ -9,7 +9,7 @@ import slash.financing.data.Expense;
 import slash.financing.data.User;
 
 public interface ExpenseService {
-    List<Expense> getUserExpenses(User user);
+    List<Expense> getAllUserExpenses(User user);
 
     Expense getExpenseById(UUID id);
 
@@ -18,5 +18,7 @@ public interface ExpenseService {
     BigDecimal getTotalMoneySpentForUserInDateRange(User user, LocalDate startDate, LocalDate endDate);
 
     List<Expense> getExpensesForUserInDateRange(User user, LocalDate startDate, LocalDate endDate);
+
+    BigDecimal getTotalMoneySpentForUser(User user);
 
 }

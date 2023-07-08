@@ -15,13 +15,20 @@ import slash.financing.data.User;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
-    List<Expense> findByUser(User user);
+        List<Expense> findByUser(User user);
 
-    @Query("SELECT SUM(e.amount) FROM Expense e WHERE e.user = :user AND e.date BETWEEN :startDate AND :endDate")
-    BigDecimal getTotalMoneySpentForUserInDateRange(@Param("user") User user, @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate);
+        @Query("SELECT SUM(e.amount) FROM Expense e WHERE e.user = :user AND e.date BETWEEN :startDate AND :endDate")
+        BigDecimal getTotalMoneySpentForUserInDateRange(@Param("user") User user,
+                        @Param("startDate") LocalDate startDate,
+                        @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT e FROM Expense e WHERE e.user = :user AND e.date BETWEEN :startDate AND :endDate")
-    List<Expense> getExpensesForUserInDateRange(@Param("user") User user, @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate);
+        @Query("SELECT e FROM Expense e WHERE e.user = :user AND e.date BETWEEN :startDate AND :endDate")
+        List<Expense> getExpensesForUserInDateRange(@Param("user") User user, @Param("startDate") LocalDate startDate,
+                        @Param("endDate") LocalDate endDate);
+
+        @Query("SELECT SUM(e.amount) FROM Expense e WHERE e.user = :user")
+        BigDecimal getTotalMoneySpentForUser(@Param("user") User user);
+
+        @Query("SELECT e FROM Expense e WHERE e.user = :user")
+        List<Expense> getExpensesForUser(@Param("user") User user);
 }

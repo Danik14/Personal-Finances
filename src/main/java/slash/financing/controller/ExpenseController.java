@@ -42,17 +42,23 @@ public class ExpenseController {
     private final BudgetCategoryService budgetCategoryService;
     private final ModelMapper modelMapper;
 
-    @GetMapping
-    public ResponseEntity<List<ExpenseDto>> getUserExpenses(Principal principal) {
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<Map<String, Object>> getUserExpenses(Principal principal) {
         String userEmail = principal.getName();
         User user = userService.getUserByEmail(userEmail);
-        List<Expense> expenses = expenseService.getUserExpenses(user);
 
+        Map<String, Object> response = new HashMap<>();
+
+        List<Expense> expenses = expenseService.getAllUserExpenses(user);
+        BigDecimal totalExpenses = expenseService.getTotalMoneySpentForUser(user);
         List<ExpenseDto> expenseResponses = expenses.stream()
                 .map(expense -> modelMapper.map(expense, ExpenseDto.class))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok().body(expenseResponses);
+        response.put("total", totalExpenses);
+        response.put("expenses", expenseResponses);
+
+        return ResponseEntity.ok(response);
 
     }
 
@@ -67,9 +73,12 @@ public class ExpenseController {
         User user = userService.getUserByEmail(userEmail);
         BigDecimal totalExpenses = expenseService.getTotalMoneySpentForUserInDateRange(user, startDate, endDate);
         List<Expense> expenses = expenseService.getExpensesForUserInDateRange(user, startDate, endDate);
+        List<ExpenseDto> expenseResponses = expenses.stream()
+                .map(expense -> modelMapper.map(expense, ExpenseDto.class))
+                .collect(Collectors.toList());
 
         response.put("total", totalExpenses);
-        response.put("expenses", expenses);
+        response.put("expenses", expenseResponses);
 
         return ResponseEntity.ok(response);
     }
