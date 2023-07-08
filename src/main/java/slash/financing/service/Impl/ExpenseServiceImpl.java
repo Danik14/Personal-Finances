@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import slash.financing.data.BudgetCategory;
 import slash.financing.data.Expense;
 import slash.financing.data.User;
 import slash.financing.exception.ExpenseNotFoundException;
@@ -42,5 +43,27 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public BigDecimal getTotalMoneySpentForUser(User user) {
         return expenseRepository.getTotalMoneySpentForUser(user);
+    }
+
+    @Override
+    public List<Expense> getByBudgetCategory(BudgetCategory budgetCategory) {
+        return expenseRepository.findByBudgetCategory(budgetCategory);
+    }
+
+    @Override
+    public List<Expense> getByBudgetCategoryAndDateBetween(BudgetCategory budgetCategory, LocalDate startDate,
+            LocalDate endDate) {
+        return expenseRepository.findByBudgetCategoryAndDateBetween(budgetCategory, startDate, endDate);
+    }
+
+    @Override
+    public BigDecimal getTotalMoneySpentForBudgetCategory(BudgetCategory budgetCategory) {
+        return expenseRepository.getTotalMoneySpentForBudgetCategory(budgetCategory);
+    }
+
+    @Override
+    public BigDecimal getTotalMoneySpentForBudgetCategoryInDateRange(BudgetCategory budgetCategory, LocalDate startDate,
+            LocalDate endDate) {
+        return expenseRepository.getTotalMoneySpentForBudgetCategoryInDateRange(budgetCategory, startDate, endDate);
     }
 }

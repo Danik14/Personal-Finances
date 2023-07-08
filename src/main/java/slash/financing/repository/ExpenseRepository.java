@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import slash.financing.data.BudgetCategory;
 import slash.financing.data.Expense;
 import slash.financing.data.User;
 
@@ -31,4 +32,18 @@ public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
 
         @Query("SELECT e FROM Expense e WHERE e.user = :user")
         List<Expense> getExpensesForUser(@Param("user") User user);
+
+        List<Expense> findByBudgetCategory(BudgetCategory budgetCategory);
+
+        @Query("SELECT SUM(e.amount) FROM Expense e WHERE e.budgetCategory = :budgetCategory")
+        BigDecimal getTotalMoneySpentForBudgetCategory(@Param("budgetCategory") BudgetCategory budgetCategory);
+
+        @Query("SELECT SUM(e.amount) FROM Expense e WHERE e.budgetCategory = :budgetCategory AND e.date BETWEEN :startDate AND :endDate")
+        BigDecimal getTotalMoneySpentForBudgetCategoryInDateRange(
+                        @Param("budgetCategory") BudgetCategory budgetCategory, @Param("startDate") LocalDate startDate,
+                        @Param("endDate") LocalDate endDate);
+
+        List<Expense> findByBudgetCategoryAndDateBetween(BudgetCategory budgetCategory, LocalDate startDate,
+                        LocalDate endDate);
+
 }

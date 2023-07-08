@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import slash.financing.data.BudgetCategory;
 import slash.financing.data.Expense;
 import slash.financing.data.User;
 
@@ -21,4 +22,13 @@ public interface ExpenseService {
 
     BigDecimal getTotalMoneySpentForUser(User user);
 
+    List<Expense> getByBudgetCategory(BudgetCategory budgetCategory);
+
+    List<Expense> getByBudgetCategoryAndDateBetween(BudgetCategory budgetCategory, LocalDate startDate,
+            LocalDate endDate);
+
+    BigDecimal getTotalMoneySpentForBudgetCategory(BudgetCategory budgetCategory);
+
+    BigDecimal getTotalMoneySpentForBudgetCategoryInDateRange(BudgetCategory budgetCategory, LocalDate startDate,
+            LocalDate endDate);
 }
