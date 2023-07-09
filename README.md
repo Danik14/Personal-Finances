@@ -33,4 +33,4 @@ To set up the Expense Tracker project locally, follow these steps:
 1. Clone the repository from GitHub:
 
    ```bash
-   git clone [https://github.com/Danik14/expense-tracker.git](https://github.com/Danik14/SpendWise.git)https://github.com/Danik14/SpendWise.git
+   git clone https://github.com/Danik14/SpendWise.git
