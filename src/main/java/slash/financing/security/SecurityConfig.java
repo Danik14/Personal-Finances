@@ -1,4 +1,4 @@
-package slash.financing.config;
+package slash.financing.security;
 
 import static slash.financing.enums.UserRole.ADMIN;
 import static slash.financing.enums.UserRole.VERIFIED_USER;

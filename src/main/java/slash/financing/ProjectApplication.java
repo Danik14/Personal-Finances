@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
 @RequiredArgsConstructor
-@PropertySource(value = ".env", encoding = "UTF-8")
+@PropertySource("classpath:.env")
 public class ProjectApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectApplication.class, args);
