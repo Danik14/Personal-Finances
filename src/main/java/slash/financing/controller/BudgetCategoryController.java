@@ -57,25 +57,6 @@ public class BudgetCategoryController {
         return ResponseEntity.ok().body(budgetCategoryService.getBudgetCategoryById(id));
     }
 
-    // @PatchMapping("/{uuid}")
-    // public ResponseEntity<?> updateUser(@PathVariable UUID uuid, @RequestBody
-    // UserUpdateDto userUpdateDto,
-    // Principal principal) {
-    // String userEmail = principal.getName();
-    // User user = userService.getUserById(uuid);
-
-    // // Check if the email is being updated to a different value
-    // if (!user.getEmail().equals(userEmail)) {
-    // log.error(userEmail + " " + user.getEmail());
-
-    // throw new ResponseStatusException(HttpStatus.CONFLICT,
-    // "Only user who created this account can change its username!");
-    // }
-
-    // return ResponseEntity.ok().body(userService.updateUser(user, userUpdateDto));
-
-    // }
-
     @PostMapping("")
     public ResponseEntity<?> addPersonalBudgetCategory(@Valid @RequestBody BudgetCategoryDto budgetCategoryDto,
             BindingResult bindingResult,

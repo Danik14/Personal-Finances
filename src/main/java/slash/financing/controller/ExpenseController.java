@@ -35,7 +35,6 @@ import slash.financing.service.UserService;
 @RestController
 @RequestMapping("api/v1/expenses")
 @RequiredArgsConstructor
-// @Slf4j
 public class ExpenseController {
     private final UserService userService;
     private final ExpenseService expenseService;
@@ -155,11 +154,13 @@ public class ExpenseController {
         User user = userService.getUserByEmail(userEmail);
         BudgetCategory budgetCategory = budgetCategoryService.getBudgetCategoryById(budgetCategoryId);
 
-        Expense expense = modelMapper.map(expenseDto, Expense.class);
-
-        expense.setUser(user);
-        expense.setBudgetCategory(budgetCategory);
-        expense.setDate(LocalDate.now());
+        Expense expense = Expense.builder()
+                .user(user)
+                .date(LocalDate.now())
+                .budgetCategory(budgetCategory)
+                .amount(expenseDto.getAmount())
+                .description(expenseDto.getDescription())
+                .build();
 
         return ResponseEntity.ok().body(expenseService.saveExpense(expense));
     }
