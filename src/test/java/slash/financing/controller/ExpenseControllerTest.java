@@ -55,23 +55,19 @@ public class ExpenseControllerTest {
     @Test
     @WithMockUser
     public void testGetUserExpenses_ValidUser() throws Exception {
-        // Mock the principal's name for the test
         when(userService.getUserByEmail(anyString())).thenReturn(new User());
 
-        // Mock the service to return a list of expenses
         List<Expense> expenses = Arrays.asList(
                 Expense.builder().id(UUID.randomUUID()).amount(BigDecimal.valueOf(100)).description("Expense 1").build(),
                 Expense.builder().id(UUID.randomUUID()).amount(BigDecimal.valueOf(200)).description("Expense 2").build()
         );
         when(expenseService.getAllUserExpenses(any(User.class))).thenReturn(expenses);
+        when(expenseService.getTotalMoneySpentForUser(any(User.class))).thenReturn(BigDecimal.valueOf(300));
 
-        // Perform the GET request to get user expenses
-        mockMvc.perform(get("/api/v1/expenses").principal(new Principal() {
-                    @Override
-                    public String getName() {
-                        return "user@example.com"; // Mock the user's email
-                    }
-                }))
+        mockMvc.perform(get("/api/v1/expenses").principal(
+                        () -> {
+                            return "user@example.com";
+                        }))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.total").value(300.0))
                 .andExpect(jsonPath("$.expenses").isArray())
@@ -79,7 +75,6 @@ public class ExpenseControllerTest {
                 .andExpect(jsonPath("$.expenses[0].description").value("Expense 1"))
                 .andExpect(jsonPath("$.expenses[1].description").value("Expense 2"));
 
-        // Verify that the service method was called with the correct arguments
         verify(expenseService, times(1)).getAllUserExpenses(any(User.class));
     }
 
@@ -90,10 +85,8 @@ public class ExpenseControllerTest {
         expenseDto.setAmount(BigDecimal.valueOf(150));
         expenseDto.setDescription("Valid expense");
 
-        // Mock the principal's name for the test
         when(userService.getUserByEmail(anyString())).thenReturn(new User());
 
-        // Mock the service to return the created expense
         Expense createdExpense = Expense.builder()
                 .id(UUID.randomUUID())
                 .amount(expenseDto.getAmount())
@@ -102,7 +95,6 @@ public class ExpenseControllerTest {
         when(expenseService.saveExpense(any(Expense.class))).thenReturn(createdExpense);
         when(budgetCategoryService.getBudgetCategoryById(any(UUID.class))).thenReturn(new BudgetCategory());
 
-        // Perform the POST request to add an expense
         mockMvc.perform(post("/api/v1/expenses/{budgetCategoryId}", UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(expenseDto)))
@@ -111,7 +103,6 @@ public class ExpenseControllerTest {
                 .andExpect(jsonPath("$.amount").value(150.0))
                 .andExpect(jsonPath("$.description").value("Valid expense"));
 
-        // Verify that the service method was called with the correct arguments
         verify(expenseService, times(1)).saveExpense(any(Expense.class));
     }
 }

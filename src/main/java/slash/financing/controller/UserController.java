@@ -8,12 +8,8 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +24,7 @@ import slash.financing.service.UserService;
 @RequestMapping("api/v1/users")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class UserController {
     private final ModelMapper modelMapper;
     private final UserService userService;
@@ -36,13 +33,6 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getAll() {
         List<User> users = userService.getAllUsers();
 
-        // Really powerful tool for mapping dtos
-        // modelMapper uses user's fiels names and tries to convert them to UserDto
-        // fields
-        // UserDto class also has list of FriendDto named friends.
-        // So what modelMapper does is it tries to convert List<User> to List<FriendDto>
-        // under the hood
-        // impresive, very nice
         List<UserDto> userResponse = new ArrayList<>();
         for (User user : users) {
             UserDto userDto = modelMapper.map(user, UserDto.class);
@@ -62,7 +52,6 @@ public class UserController {
         String userEmail = principal.getName();
         User loggedInUser = userService.getUserByEmail(userEmail);
 
-        // Check if the logged-in user is an admin
         if (loggedInUser.getRole() == UserRole.ADMIN || loggedInUser.getId().equals(id)) {
             // If admin or accessing own ID, return the full user information
             User user = userService.getUserById(id);
@@ -95,12 +84,8 @@ public class UserController {
 
     }
 
-    public ResponseEntity<?> deleteUser(@PathVariable String uuid) {
-        UUID id = UUID.fromString(uuid);
-        if (uuid == null) {
-            throw new IllegalArgumentException("Invalid UUID format");
-        }
-
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
 
         return ResponseEntity.ok().body("User was successfuly deleted");

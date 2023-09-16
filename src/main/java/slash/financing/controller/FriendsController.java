@@ -5,11 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +18,8 @@ import slash.financing.service.UserService;
 @RequestMapping("api/v1/users/friends")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class FriendsController {
-    // private final ModelMapper mapper;
     private final UserService userService;
     private final FriendService friendService;
 
@@ -35,34 +32,22 @@ public class FriendsController {
     }
 
     @PostMapping("/{uuid}")
-    public ResponseEntity<User> addFriend(@PathVariable String uuid, Principal principal) {
-        UUID friendId = UUID.fromString(uuid);
-        if (uuid == null) {
-            throw new IllegalArgumentException("Invalid UUID format");
-        }
-
+    public ResponseEntity<User> addFriend(@PathVariable UUID uuid, Principal principal) {
         String userEmail = principal.getName();
         User user = userService.getUserByEmail(userEmail);
-        User friend = userService.getUserById(friendId);
+        User friend = userService.getUserById(uuid);
 
-        try {
-            friendService.addFriendToUser(user, friend);
-        } catch (Exception e) {
-            log.error("Unable to save the user: ", e);
-        }
+        friendService.addFriendToUser(user, friend);
 
         return ResponseEntity.ok().body(friend);
     }
 
-    public ResponseEntity<?> deleteUser(@PathVariable String uuid) {
-        UUID id = UUID.fromString(uuid);
-        if (uuid == null) {
-            throw new IllegalArgumentException("Invalid UUID format");
-        }
 
-        userService.deleteUser(id);
-
-        return ResponseEntity.ok().body("User was successfuly deleted");
-    }
+//    @DeleteMapping("/{uuid}")
+//    public ResponseEntity<?> deleteFriend(@PathVariable UUID uuid) {
+//        userService.deleteUser(uuid);
+//
+//        return ResponseEntity.ok().body("User was successfuly deleted");
+//    }
 
 }
