@@ -29,9 +29,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
 
-    @Column(name = "username", length = 35, nullable = false)
+    @Column(name = "name", length = 35, nullable = false)
     @Length(min = 3, max = 35)
-    private String username;
+    private String name;
 
     @Column(name = "email", nullable = false)
     @Email

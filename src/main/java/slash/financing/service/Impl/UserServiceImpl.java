@@ -1,24 +1,25 @@
 package slash.financing.service.Impl;
 
-import java.util.List;
-import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import slash.financing.data.User;
 import slash.financing.dto.User.UserUpdateDto;
 import slash.financing.enums.UserRole;
 import slash.financing.exception.UserNotFoundException;
+import slash.financing.mapper.UserMapper;
 import slash.financing.repository.UserRepository;
 import slash.financing.service.UserService;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
 
     @Override
     public List<User> getAllUsers() {
@@ -50,10 +51,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user, UserUpdateDto userUpdateDto) {
-        modelMapper.map(userUpdateDto, user);
-
-        return userRepository.save(user);
+    public User updateUser(UserUpdateDto userUpdateDto) {
+        return userRepository.save(userMapper.updateDtoToEntity(userUpdateDto));
     }
 
     @Override

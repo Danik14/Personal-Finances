@@ -1,24 +1,18 @@
 package slash.financing.controller;
 
-import java.util.Date;
-
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.server.ResponseStatusException;
-
-import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
 import slash.financing.dto.ErrorDto;
-import slash.financing.exception.BudgetCategoryNotFoundException;
-import slash.financing.exception.BudgetCategoryPersonalCountException;
-import slash.financing.exception.UserAlreadyExistsException;
-import slash.financing.exception.UserNotFoundException;
-import slash.financing.exception.VerificationTokenNotFoundException;
+import slash.financing.exception.*;
+
+import java.util.Date;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {
@@ -84,7 +78,7 @@ public class ExceptionHandlerController {
                                                 .build());
         }
 
-        @ExceptionHandler({ ResponseStatusException.class, BudgetCategoryPersonalCountException.class })
+        @ExceptionHandler({ BudgetCategoryPersonalCountException.class })
         public ResponseEntity<ErrorDto> handleConflict(HttpServletRequest request, RuntimeException e) {
                 return ResponseEntity
                                 .status(HttpStatus.CONFLICT)

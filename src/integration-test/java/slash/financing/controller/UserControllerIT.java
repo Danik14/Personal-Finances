@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class UserControllerIT {
     @Autowired
     WebApplicationContext context;
     @Autowired

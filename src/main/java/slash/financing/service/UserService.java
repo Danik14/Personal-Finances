@@ -1,10 +1,10 @@
 package slash.financing.service;
 
-import java.util.List;
-import java.util.UUID;
-
 import slash.financing.data.User;
 import slash.financing.dto.User.UserUpdateDto;
+
+import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
     User saveUser(User user);
@@ -19,5 +19,5 @@ public interface UserService {
 
     int verifyUserEmail(String email);
 
-    User updateUser(User user, UserUpdateDto userUpdateDto);
+    User updateUser(UserUpdateDto userUpdateDto);
 }

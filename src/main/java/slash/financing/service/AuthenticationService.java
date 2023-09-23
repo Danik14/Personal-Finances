@@ -1,16 +1,12 @@
 package slash.financing.service;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import slash.financing.data.User;
 import slash.financing.data.VerificationToken;
 import slash.financing.dto.AuthenticationRequestDto;
@@ -21,6 +17,9 @@ import slash.financing.exception.UserAlreadyExistsException;
 import slash.financing.repository.UserRepository;
 import slash.financing.security.JwtService;
 import slash.financing.security.UserDetailsServiceImpl;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,14 +39,14 @@ public class AuthenticationService {
         public AuthenticationResponse register(RegistrationRequest registrationRequest) {
                 if (userRepository.existsByEmail(registrationRequest.getEmail())) {
                         throw new UserAlreadyExistsException("User with such email already exists");
-                } else if (userRepository.existsByUsername(registrationRequest.getUsername())) {
+                } else if (userRepository.existsByName(registrationRequest.getUsername())) {
                         throw new UserAlreadyExistsException("User with such username already exists");
                 }
 
                 User user = User.builder()
                                 .email(registrationRequest.getEmail())
                                 .password(passwordEncoder.encode(registrationRequest.getPassword()))
-                                .username(registrationRequest.getUsername())
+                                .name(registrationRequest.getUsername())
                                 .role(UserRole.USER)
                                 .isActive(true)
                                 .build();
@@ -68,7 +67,7 @@ public class AuthenticationService {
                 // String currentHost = InetAddress.getLocalHost().getHostAddress();
                 String verificationLink = "http://localhost" + ":" + serverPort + "/api/v1/auth/verify?token="
                                 + verificationToken.getToken();
-                emailService.sendVerificationEmail(user.getEmail(), user.getUsername(), verificationLink);
+                emailService.sendVerificationEmail(user.getEmail(), user.getName(), verificationLink);
                 // } catch (UnknownHostException e) {
                 // log.error("{}", e);
                 // }

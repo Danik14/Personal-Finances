@@ -1,10 +1,6 @@
 package slash.financing.security;
 
-import static slash.financing.enums.UserRole.ADMIN;
-import static slash.financing.enums.UserRole.VERIFIED_USER;
-
-import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,8 +13,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import lombok.RequiredArgsConstructor;
-import slash.financing.security.JwtAuthenticationFilter;
+import java.util.List;
+
+import static slash.financing.enums.UserRole.ADMIN;
+import static slash.financing.enums.UserRole.VERIFIED_USER;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +26,7 @@ public class SecurityConfig {
         private final AuthenticationProvider authenticationProvider;
 
         @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http)
+        public SecurityFilterChain securityFilterChain(HttpSecurity http)
                         throws Exception {
                 http
                                 .csrf()
