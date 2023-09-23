@@ -1,11 +1,11 @@
 package slash.financing.service;
 
-import java.util.List;
-import java.util.UUID;
-
 import slash.financing.data.BudgetCategory;
 import slash.financing.data.User;
 import slash.financing.dto.BudgetCategoryDto;
+
+import java.util.List;
+import java.util.UUID;
 
 public interface BudgetCategoryService {
     BudgetCategory createPersonalBudgetCategory(BudgetCategoryDto budgetCategoryDto, User user);

@@ -1,17 +1,9 @@
 package slash.financing.config;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
 import slash.financing.data.BudgetCategory;
 import slash.financing.data.Expense;
 import slash.financing.data.User;
@@ -19,6 +11,13 @@ import slash.financing.enums.UserRole;
 import slash.financing.repository.BudgetCategoryRepository;
 import slash.financing.repository.ExpenseRepository;
 import slash.financing.repository.UserRepository;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor

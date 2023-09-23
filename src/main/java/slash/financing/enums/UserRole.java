@@ -1,24 +1,17 @@
 package slash.financing.enums;
 
-import static slash.financing.enums.Permission.ADMIN_CREATE;
-import static slash.financing.enums.Permission.ADMIN_DELETE;
-import static slash.financing.enums.Permission.ADMIN_READ;
-import static slash.financing.enums.Permission.ADMIN_UPDATE;
-import static slash.financing.enums.Permission.VERIFIED_CREATE;
-import static slash.financing.enums.Permission.VERIFIED_DELETE;
-import static slash.financing.enums.Permission.VERIFIED_READ;
-import static slash.financing.enums.Permission.VERIFIED_UPDATE;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import static slash.financing.enums.Permission.*;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
+@Getter
 @RequiredArgsConstructor
 public enum UserRole {
 
@@ -36,7 +29,6 @@ public enum UserRole {
                                         ADMIN_DELETE,
                                         ADMIN_CREATE));
 
-        @Getter
         private final Set<Permission> permissions;
 
         public List<SimpleGrantedAuthority> getAuthorities() {

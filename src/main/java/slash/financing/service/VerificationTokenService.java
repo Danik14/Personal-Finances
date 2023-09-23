@@ -1,14 +1,13 @@
 package slash.financing.service;
 
-import java.time.LocalDateTime;
-
-import org.springframework.stereotype.Service;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import slash.financing.data.VerificationToken;
 import slash.financing.exception.VerificationTokenNotFoundException;
 import slash.financing.repository.VerificationTokenRepository;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor

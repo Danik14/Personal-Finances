@@ -1,26 +1,20 @@
 package slash.financing.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import slash.financing.dto.AuthenticationRequestDto;
 import slash.financing.dto.AuthenticationResponse;
 import slash.financing.dto.RegistrationRequest;
 import slash.financing.service.AuthenticationService;
 import slash.financing.service.VerificationTokenService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")

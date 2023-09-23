@@ -1,19 +1,18 @@
 package slash.financing.service.Impl;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import slash.financing.data.BudgetCategory;
 import slash.financing.data.Expense;
 import slash.financing.data.User;
 import slash.financing.exception.ExpenseNotFoundException;
 import slash.financing.repository.ExpenseRepository;
 import slash.financing.service.ExpenseService;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

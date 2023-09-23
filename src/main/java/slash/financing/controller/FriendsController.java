@@ -1,18 +1,17 @@
 package slash.financing.controller;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import slash.financing.data.User;
 import slash.financing.service.FriendService;
 import slash.financing.service.UserService;
+
+import java.security.Principal;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/users/friends")
