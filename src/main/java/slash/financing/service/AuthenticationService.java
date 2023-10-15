@@ -67,7 +67,7 @@ public class AuthenticationService {
                 // String currentHost = InetAddress.getLocalHost().getHostAddress();
                 String verificationLink = "http://localhost" + ":" + serverPort + "/api/v1/auth/verify?token="
                                 + verificationToken.getToken();
-                emailService.sendVerificationEmail(user.getEmail(), user.getName(), verificationLink);
+//                emailService.sendVerificationEmail(user.getEmail(), user.getName(), verificationLink);
                 // } catch (UnknownHostException e) {
                 // log.error("{}", e);
                 // }

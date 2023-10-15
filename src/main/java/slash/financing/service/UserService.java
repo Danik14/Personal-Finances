@@ -20,4 +20,8 @@ public interface UserService {
     int verifyUserEmail(String email);
 
     User updateUser(UserUpdateDto userUpdateDto);
+
+    boolean doesUserExistByEmail(String email);
+
+    boolean doesUserExistByName(String name);
 }

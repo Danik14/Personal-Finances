@@ -29,14 +29,14 @@ public class DataLoader implements CommandLineRunner {
 
         @Override
         public void run(String... args) throws Exception {
-                // // Create and save the default budget categories
-                // createAndSaveDefaultCategories();
-
-                // // Create and save the default users
-                // createAndSaveDefaultUsers();
-
-                // // Create and save the default expenses
-                // createAndSaveDefaultExpenses();
+//                 // Create and save the default budget categories
+//                 createAndSaveDefaultCategories();
+//
+//                 // Create and save the default users
+//                 createAndSaveDefaultUsers();
+//
+//                 // Create and save the default expenses
+//                 createAndSaveDefaultExpenses();
         }
 
         private void createAndSaveDefaultCategories() {
